@@ -1,247 +1,461 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>E-IoT Smart Home</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body{
-  font-family:Arial;
-  background:#101820;
-  color:white;
-  text-align:center;
-  padding:15px;
-}
+  <title>E-IoT Smart Home Control</title>
 
-h1{
-  color:#00e5ff;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-.card{
-  background:#1c2833;
-  border-radius:15px;
-  padding:20px;
-  margin:15px auto;
-  max-width:420px;
-}
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #101820;
+      color: white;
+      text-align: center;
+    }
 
-button{
-  border:0;
-  border-radius:10px;
-  padding:14px 20px;
-  margin:5px;
-  font-size:16px;
-  color:white;
-}
+    h1 {
+      color: #00e5ff;
+      margin-bottom: 5px;
+    }
 
-.on{
-  background:#00a86b;
-}
+    .subtitle {
+      color: #cccccc;
+      margin-bottom: 25px;
+    }
 
-.off{
-  background:#d63031;
-}
+    .card {
+      background: #1c2833;
+      border-radius: 18px;
+      padding: 20px;
+      margin: 15px auto;
+      max-width: 450px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    }
 
-.status{
-  font-size:20px;
-  margin:10px;
-}
+    h2 {
+      margin-top: 0;
+    }
 
-.value{
-  font-size:20px;
-  color:#00ff99;
-}
-</style>
+    .status {
+      font-size: 20px;
+      margin: 12px;
+    }
+
+    .value {
+      font-size: 20px;
+      margin: 10px;
+      color: #00ff99;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 14px 20px;
+      margin: 5px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      cursor: pointer;
+    }
+
+    .on {
+      background: #00a86b;
+    }
+
+    .off {
+      background: #d63031;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    .connection {
+      margin: 20px auto;
+      padding: 12px;
+      max-width: 450px;
+      border-radius: 10px;
+      background: #333;
+      color: #ffcc00;
+    }
+  </style>
 </head>
 
 <body>
 
-<h1>🏠 E-IoT SMART HOME</h1>
+  <h1>🏠 E-IoT SMART HOME</h1>
 
-<div class="card">
-<h2>🚶 Motion</h2>
-<div class="status">
-Status: <span id="motion">OFF</span>
-</div>
+  <div class="subtitle">
+    Smart Home Appliance Control
+  </div>
 
-<button class="on" onclick="setControl('motion',true)">
-MOTION ON
-</button>
-
-<button class="off" onclick="setControl('motion',false)">
-MOTION OFF
-</button>
-</div>
+  <div class="connection" id="connection">
+    🔄 Connecting to Firebase...
+  </div>
 
 
-<div class="card">
-<h2>💡 Room Light</h2>
+  <!-- MOTION -->
 
-<div class="status">
-Status: <span id="light">OFF</span>
-</div>
+  <div class="card">
 
-<button class="on" onclick="setControl('light',true)">
-LIGHT ON
-</button>
+    <h2>🚶 Motion Sensor</h2>
 
-<button class="off" onclick="setControl('light',false)">
-LIGHT OFF
-</button>
-</div>
+    <div class="status">
+      Status:
+      <span id="motion">OFF</span>
+    </div>
 
+    <button class="on" onclick="setControl('motion', true)">
+      MOTION ON
+    </button>
 
-<div class="card">
-<h2>🌀 Fan</h2>
+    <button class="off" onclick="setControl('motion', false)">
+      MOTION OFF
+    </button>
 
-<div class="status">
-Status: <span id="fan">OFF</span>
-</div>
-
-<button class="on" onclick="setControl('fan',true)">
-FAN ON
-</button>
-
-<button class="off" onclick="setControl('fan',false)">
-FAN OFF
-</button>
-</div>
+  </div>
 
 
-<div class="card">
-<h2>🔔 Buzzer</h2>
+  <!-- LIGHT -->
 
-<div class="status">
-Status: <span id="buzzer">OFF</span>
-</div>
+  <div class="card">
 
-<button class="on" onclick="setControl('buzzer',true)">
-BUZZER ON
-</button>
+    <h2>💡 Room Light</h2>
 
-<button class="off" onclick="setControl('buzzer',false)">
-BUZZER OFF
-</button>
-</div>
+    <div class="status">
+      Status:
+      <span id="light">OFF</span>
+    </div>
 
+    <button class="on" onclick="setControl('light', true)">
+      LIGHT ON
+    </button>
 
-<div class="card">
-<h2>🌡 Environment</h2>
+    <button class="off" onclick="setControl('light', false)">
+      LIGHT OFF
+    </button>
 
-<div class="value">
-Temperature: <span id="temperature">--</span> °C
-</div>
-
-<div class="value">
-Humidity: <span id="humidity">--</span> %
-</div>
-</div>
+  </div>
 
 
-<div class="card">
-<h2>🔥 Gas</h2>
+  <!-- FAN -->
 
-<div class="value">
-Gas: <span id="gasppm">--</span> PPM
-</div>
+  <div class="card">
 
-<div class="status">
-Alarm: <span id="gasalarm">SAFE</span>
-</div>
-</div>
+    <h2>🌀 Fan</h2>
 
+    <div class="status">
+      Status:
+      <span id="fan">OFF</span>
+    </div>
 
-<div class="card">
-<h2>💧 Water</h2>
+    <button class="on" onclick="setControl('fan', true)">
+      FAN ON
+    </button>
 
-<div class="value">
-Water: <span id="water">--</span>
-</div>
+    <button class="off" onclick="setControl('fan', false)">
+      FAN OFF
+    </button>
 
-<div class="status">
-Status: <span id="wateralarm">SAFE</span>
-</div>
-</div>
+  </div>
 
 
-<script>
+  <!-- BUZZER -->
 
-const FIREBASE_URL =
-"https://smart-home-control-2ab9e-default-rtdb.firebaseio.com";
+  <div class="card">
+
+    <h2>🔔 Buzzer</h2>
+
+    <div class="status">
+      Status:
+      <span id="buzzer">OFF</span>
+    </div>
+
+    <button class="on" onclick="setControl('buzzer', true)">
+      BUZZER ON
+    </button>
+
+    <button class="off" onclick="setControl('buzzer', false)">
+      BUZZER OFF
+    </button>
+
+  </div>
 
 
-function setControl(device,state)
-{
-  fetch(FIREBASE_URL + "/control/" + device + ".json",{
-    method:"PUT",
-    body:JSON.stringify(state)
-  })
-  .then(response => {
+  <!-- TEMPERATURE -->
 
-    if(!response.ok)
-    {
-      throw new Error("Firebase write failed");
+  <div class="card">
+
+    <h2>🌡 Environment</h2>
+
+    <div class="value">
+      Temperature:
+      <span id="temperature">--</span> °C
+    </div>
+
+    <div class="value">
+      Humidity:
+      <span id="humidity">--</span> %
+    </div>
+
+  </div>
+
+
+  <!-- GAS -->
+
+  <div class="card">
+
+    <h2>🔥 Gas Sensor</h2>
+
+    <div class="value">
+      Gas:
+      <span id="gasppm">--</span> PPM
+    </div>
+
+    <div class="status">
+      Alarm:
+      <span id="gasalarm">SAFE</span>
+    </div>
+
+  </div>
+
+
+  <!-- WATER -->
+
+  <div class="card">
+
+    <h2>💧 Water Sensor</h2>
+
+    <div class="value">
+      Water:
+      <span id="water">--</span>
+    </div>
+
+    <div class="status">
+      Status:
+      <span id="wateralarm">SAFE</span>
+    </div>
+
+  </div>
+
+
+  <script>
+
+    /*
+      FIREBASE REALTIME DATABASE URL
+    */
+
+    const FIREBASE_URL =
+      "https://smart-home-control-507d5-default-rtdb.firebaseio.com";
+
+
+    /*
+      SEND CONTROL COMMAND TO FIREBASE
+    */
+
+    function setControl(device, state) {
+
+      fetch(
+        FIREBASE_URL + "/control/" + device + ".json",
+        {
+          method: "PUT",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify(state)
+        }
+      )
+
+      .then(response => {
+
+        if (!response.ok) {
+          throw new Error("Firebase write failed");
+        }
+
+        console.log(device + " = " + state);
+
+        updateStatus();
+
+      })
+
+      .catch(error => {
+
+        console.log(error);
+
+        document.getElementById("connection").innerHTML =
+          "❌ Firebase connection error";
+
+      });
+
     }
 
+
+    /*
+      READ STATUS FROM FIREBASE
+    */
+
+    function updateStatus() {
+
+      fetch(FIREBASE_URL + "/status.json")
+
+        .then(response => {
+
+          if (!response.ok) {
+            throw new Error("Firebase read failed");
+          }
+
+          return response.json();
+
+        })
+
+        .then(data => {
+
+          document.getElementById("connection").innerHTML =
+            "🟢 Firebase Connected";
+
+          if (!data) {
+            return;
+          }
+
+
+          /*
+            MOTION
+          */
+
+          document.getElementById("motion").innerHTML =
+            data.motion ? "ON" : "OFF";
+
+
+          /*
+            LIGHT
+          */
+
+          document.getElementById("light").innerHTML =
+            data.light ? "ON" : "OFF";
+
+
+          /*
+            FAN
+          */
+
+          document.getElementById("fan").innerHTML =
+            data.fan ? "ON" : "OFF";
+
+
+          /*
+            BUZZER
+          */
+
+          document.getElementById("buzzer").innerHTML =
+            data.buzzer ? "ON" : "OFF";
+
+
+          /*
+            TEMPERATURE
+          */
+
+          if (data.temperature !== undefined) {
+
+            document.getElementById("temperature").innerHTML =
+              data.temperature;
+
+          }
+
+
+          /*
+            HUMIDITY
+          */
+
+          if (data.humidity !== undefined) {
+
+            document.getElementById("humidity").innerHTML =
+              data.humidity;
+
+          }
+
+
+          /*
+            GAS PPM
+          */
+
+          if (data.gasppm !== undefined) {
+
+            document.getElementById("gasppm").innerHTML =
+              data.gasppm;
+
+          }
+
+
+          /*
+            GAS ALARM
+          */
+
+          document.getElementById("gasalarm").innerHTML =
+            data.gasalarm
+              ? "🚨 ALARM"
+              : "SAFE";
+
+
+          /*
+            WATER
+          */
+
+          if (data.water !== undefined) {
+
+            document.getElementById("water").innerHTML =
+              data.water;
+
+          }
+
+
+          /*
+            WATER ALARM
+          */
+
+          document.getElementById("wateralarm").innerHTML =
+            data.wateralarm
+              ? "🚨 ALARM"
+              : "SAFE";
+
+        })
+
+        .catch(error => {
+
+          console.log("Firebase status error:", error);
+
+          document.getElementById("connection").innerHTML =
+            "🔴 Firebase Disconnected";
+
+        });
+
+    }
+
+
+    /*
+      UPDATE STATUS EVERY 1 SECOND
+    */
+
+    setInterval(updateStatus, 1000);
+
+
+    /*
+      INITIAL STATUS
+    */
+
     updateStatus();
-  })
-  .catch(error => {
-    console.log(error);
-    alert("Firebase connection error");
-  });
-}
 
-
-function updateStatus()
-{
-  fetch(FIREBASE_URL + "/status.json")
-  .then(response => response.json())
-  .then(data => {
-
-    if(!data)
-      return;
-
-    document.getElementById("motion").innerHTML =
-      data.motion ? "ON" : "OFF";
-
-    document.getElementById("light").innerHTML =
-      data.light ? "ON" : "OFF";
-
-    document.getElementById("fan").innerHTML =
-      data.fan || "OFF";
-
-    document.getElementById("buzzer").innerHTML =
-      data.buzzer ? "ON" : "OFF";
-
-    document.getElementById("temperature").innerHTML =
-      data.temperature ?? "--";
-
-    document.getElementById("humidity").innerHTML =
-      data.humidity ?? "--";
-
-    document.getElementById("gasppm").innerHTML =
-      data.gasppm ?? "--";
-
-    document.getElementById("gasalarm").innerHTML =
-      data.gasalarm ? "🚨 ALARM" : "SAFE";
-
-    document.getElementById("water").innerHTML =
-      data.water ?? "--";
-
-    document.getElementById("wateralarm").innerHTML =
-      data.wateralarm ? "🚨 ALARM" : "SAFE";
-  })
-  .catch(error => {
-    console.log("Status error:",error);
-  });
-}
-
-
-setInterval(updateStatus,1000);
-
-updateStatus();
-
-</script>
+  </script>
 
 </body>
+
 </html>
