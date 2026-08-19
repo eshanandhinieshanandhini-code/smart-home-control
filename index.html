@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>E-IoT Smart Home</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #101820;
+  color: white;
+  text-align: center;
+  padding: 15px;
+}
+
+h1 {
+  color: #00e5ff;
+}
+
+.card {
+  background: #1c2833;
+  border-radius: 15px;
+  padding: 20px;
+  margin: 15px auto;
+  max-width: 420px;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 14px 20px;
+  margin: 5px;
+  font-size: 16px;
+  color: white;
+}
+
+.on {
+  background: #00a86b;
+}
+
+.off {
+  background: #d63031;
+}
+
+.status {
+  font-size: 20px;
+  margin: 10px;
+}
+
+.value {
+  font-size: 22px;
+  color: #00ff99;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🏠 E-IoT SMART HOME</h1>
+
+<div class="card">
+<h2>🚶 Motion</h2>
+<div class="status">
+Status: <span id="motion">OFF</span>
+</div>
+
+<button class="on" onclick="motionOn()">MOTION ON</button>
+<button class="off" onclick="motionOff()">MOTION OFF</button>
+</div>
+
+<div class="card">
+<h2>💡 Room Light</h2>
+<div class="status">
+Status: <span id="light">OFF</span>
+</div>
+
+<button class="on" onclick="lightOn()">LIGHT ON</button>
+<button class="off" onclick="lightOff()">LIGHT OFF</button>
+</div>
+
+<div class="card">
+<h2>🌀 Fan</h2>
+<div class="status">
+Status: <span id="fan">OFF</span>
+</div>
+
+<button class="on" onclick="fanOn()">FAN ON</button>
+<button class="off" onclick="fanOff()">FAN OFF</button>
+</div>
+
+<div class="card">
+<h2>🔔 Buzzer</h2>
+<div class="status">
+Status: <span id="buzzer">OFF</span>
+</div>
+
+<button class="on" onclick="buzzerOn()">BUZZER ON</button>
+<button class="off" onclick="buzzerOff()">BUZZER OFF</button>
+</div>
+
+<div class="card">
+<h2>🌡 Environment</h2>
+
+<div class="value">
+Temperature: <span id="temp">--</span> °C
+</div>
+
+<div class="value">
+Humidity: <span id="humidity">--</span> %
+</div>
+</div>
+
+<div class="card">
+<h2>🔥 Gas</h2>
+
+<div class="value">
+Gas: <span id="gas">--</span> PPM
+</div>
+
+<div class="status">
+Alarm: <span id="gasAlarm">SAFE</span>
+</div>
+</div>
+
+<div class="card">
+<h2>💧 Water</h2>
+
+<div class="value">
+Water: <span id="water">--</span>
+</div>
+
+<div class="status">
+Status: <span id="waterAlarm">SAFE</span>
+</div>
+</div>
+
+<script>
+
+function motionOn() {
+  document.getElementById("motion").innerHTML = "ON";
+}
+
+function motionOff() {
+  document.getElementById("motion").innerHTML = "OFF";
+}
+
+function lightOn() {
+  document.getElementById("light").innerHTML = "ON";
+}
+
+function lightOff() {
+  document.getElementById("light").innerHTML = "OFF";
+}
+
+function fanOn() {
+  document.getElementById("fan").innerHTML = "ON";
+}
+
+function fanOff() {
+  document.getElementById("fan").innerHTML = "OFF";
+}
+
+function buzzerOn() {
+  document.getElementById("buzzer").innerHTML = "ON";
+}
+
+function buzzerOff() {
+  document.getElementById("buzzer").innerHTML = "OFF";
+}
+
+</script>
+
+</body>
+</html>
