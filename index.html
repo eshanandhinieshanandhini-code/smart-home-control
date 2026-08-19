@@ -5,51 +5,51 @@
 <title>E-IoT Smart Home</title>
 
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #101820;
-  color: white;
-  text-align: center;
-  padding: 15px;
+body{
+  font-family:Arial;
+  background:#101820;
+  color:white;
+  text-align:center;
+  padding:15px;
 }
 
-h1 {
-  color: #00e5ff;
+h1{
+  color:#00e5ff;
 }
 
-.card {
-  background: #1c2833;
-  border-radius: 15px;
-  padding: 20px;
-  margin: 15px auto;
-  max-width: 420px;
+.card{
+  background:#1c2833;
+  border-radius:15px;
+  padding:20px;
+  margin:15px auto;
+  max-width:420px;
 }
 
-button {
-  border: none;
-  border-radius: 10px;
-  padding: 14px 20px;
-  margin: 5px;
-  font-size: 16px;
-  color: white;
+button{
+  border:0;
+  border-radius:10px;
+  padding:14px 20px;
+  margin:5px;
+  font-size:16px;
+  color:white;
 }
 
-.on {
-  background: #00a86b;
+.on{
+  background:#00a86b;
 }
 
-.off {
-  background: #d63031;
+.off{
+  background:#d63031;
 }
 
-.status {
-  font-size: 20px;
-  margin: 10px;
+.status{
+  font-size:20px;
+  margin:10px;
 }
 
-.value {
-  font-size: 22px;
-  color: #00ff99;
+.value{
+  font-size:20px;
+  color:#00ff99;
 }
 </style>
 </head>
@@ -64,45 +64,72 @@ button {
 Status: <span id="motion">OFF</span>
 </div>
 
-<button class="on" onclick="motionOn()">MOTION ON</button>
-<button class="off" onclick="motionOff()">MOTION OFF</button>
+<button class="on" onclick="setControl('motion',true)">
+MOTION ON
+</button>
+
+<button class="off" onclick="setControl('motion',false)">
+MOTION OFF
+</button>
 </div>
+
 
 <div class="card">
 <h2>💡 Room Light</h2>
+
 <div class="status">
 Status: <span id="light">OFF</span>
 </div>
 
-<button class="on" onclick="lightOn()">LIGHT ON</button>
-<button class="off" onclick="lightOff()">LIGHT OFF</button>
+<button class="on" onclick="setControl('light',true)">
+LIGHT ON
+</button>
+
+<button class="off" onclick="setControl('light',false)">
+LIGHT OFF
+</button>
 </div>
+
 
 <div class="card">
 <h2>🌀 Fan</h2>
+
 <div class="status">
 Status: <span id="fan">OFF</span>
 </div>
 
-<button class="on" onclick="fanOn()">FAN ON</button>
-<button class="off" onclick="fanOff()">FAN OFF</button>
+<button class="on" onclick="setControl('fan',true)">
+FAN ON
+</button>
+
+<button class="off" onclick="setControl('fan',false)">
+FAN OFF
+</button>
 </div>
+
 
 <div class="card">
 <h2>🔔 Buzzer</h2>
+
 <div class="status">
 Status: <span id="buzzer">OFF</span>
 </div>
 
-<button class="on" onclick="buzzerOn()">BUZZER ON</button>
-<button class="off" onclick="buzzerOff()">BUZZER OFF</button>
+<button class="on" onclick="setControl('buzzer',true)">
+BUZZER ON
+</button>
+
+<button class="off" onclick="setControl('buzzer',false)">
+BUZZER OFF
+</button>
 </div>
+
 
 <div class="card">
 <h2>🌡 Environment</h2>
 
 <div class="value">
-Temperature: <span id="temp">--</span> °C
+Temperature: <span id="temperature">--</span> °C
 </div>
 
 <div class="value">
@@ -110,17 +137,19 @@ Humidity: <span id="humidity">--</span> %
 </div>
 </div>
 
+
 <div class="card">
 <h2>🔥 Gas</h2>
 
 <div class="value">
-Gas: <span id="gas">--</span> PPM
+Gas: <span id="gasppm">--</span> PPM
 </div>
 
 <div class="status">
-Alarm: <span id="gasAlarm">SAFE</span>
+Alarm: <span id="gasalarm">SAFE</span>
 </div>
 </div>
+
 
 <div class="card">
 <h2>💧 Water</h2>
@@ -130,43 +159,87 @@ Water: <span id="water">--</span>
 </div>
 
 <div class="status">
-Status: <span id="waterAlarm">SAFE</span>
+Status: <span id="wateralarm">SAFE</span>
 </div>
 </div>
+
 
 <script>
 
-function motionOn() {
-  document.getElementById("motion").innerHTML = "ON";
+const FIREBASE_URL =
+"https://smart-home-control-2ab9e-default-rtdb.firebaseio.com";
+
+
+function setControl(device,state)
+{
+  fetch(FIREBASE_URL + "/control/" + device + ".json",{
+    method:"PUT",
+    body:JSON.stringify(state)
+  })
+  .then(response => {
+
+    if(!response.ok)
+    {
+      throw new Error("Firebase write failed");
+    }
+
+    updateStatus();
+  })
+  .catch(error => {
+    console.log(error);
+    alert("Firebase connection error");
+  });
 }
 
-function motionOff() {
-  document.getElementById("motion").innerHTML = "OFF";
+
+function updateStatus()
+{
+  fetch(FIREBASE_URL + "/status.json")
+  .then(response => response.json())
+  .then(data => {
+
+    if(!data)
+      return;
+
+    document.getElementById("motion").innerHTML =
+      data.motion ? "ON" : "OFF";
+
+    document.getElementById("light").innerHTML =
+      data.light ? "ON" : "OFF";
+
+    document.getElementById("fan").innerHTML =
+      data.fan || "OFF";
+
+    document.getElementById("buzzer").innerHTML =
+      data.buzzer ? "ON" : "OFF";
+
+    document.getElementById("temperature").innerHTML =
+      data.temperature ?? "--";
+
+    document.getElementById("humidity").innerHTML =
+      data.humidity ?? "--";
+
+    document.getElementById("gasppm").innerHTML =
+      data.gasppm ?? "--";
+
+    document.getElementById("gasalarm").innerHTML =
+      data.gasalarm ? "🚨 ALARM" : "SAFE";
+
+    document.getElementById("water").innerHTML =
+      data.water ?? "--";
+
+    document.getElementById("wateralarm").innerHTML =
+      data.wateralarm ? "🚨 ALARM" : "SAFE";
+  })
+  .catch(error => {
+    console.log("Status error:",error);
+  });
 }
 
-function lightOn() {
-  document.getElementById("light").innerHTML = "ON";
-}
 
-function lightOff() {
-  document.getElementById("light").innerHTML = "OFF";
-}
+setInterval(updateStatus,1000);
 
-function fanOn() {
-  document.getElementById("fan").innerHTML = "ON";
-}
-
-function fanOff() {
-  document.getElementById("fan").innerHTML = "OFF";
-}
-
-function buzzerOn() {
-  document.getElementById("buzzer").innerHTML = "ON";
-}
-
-function buzzerOff() {
-  document.getElementById("buzzer").innerHTML = "OFF";
-}
+updateStatus();
 
 </script>
 
